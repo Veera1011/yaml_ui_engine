@@ -37,9 +37,9 @@ body:
   });
 
   test('OperationEngine evaluates expressions', () {
-    final state = {'username': 'Veera', 'qty': 2, 'price': 100};
+    final state = {'username': 'Veeramnikandan', 'qty': 2, 'price': 100};
     
-    expect(OperationEngine.evaluate('Welcome {{username}}', state), 'Welcome Veera');
+    expect(OperationEngine.evaluate('Welcome {{username}}', state), 'Welcome Veeramnikandan');
     expect(OperationEngine.evaluate('{{qty * price}}', state), 200);
     expect(OperationEngine.evaluate('{{qty == 2}}', state), true);
   });
@@ -359,7 +359,7 @@ body:
       'type': 'component',
       'name': 'user_card',
       'params': {
-        'name': 'Veera'
+        'name': 'Veeramnikandan'
       }
     };
 
@@ -374,6 +374,6 @@ body:
     );
 
     await tester.pumpAndSettle();
-    expect(find.text('User: Veera'), findsOneWidget);
+    expect(find.text('User: Veeramnikandan'), findsOneWidget);
   });
 }

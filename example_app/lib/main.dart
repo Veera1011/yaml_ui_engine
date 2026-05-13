@@ -36,7 +36,7 @@ class DemoHomeScreen extends StatelessWidget {
 
   static const String demoYaml = '''
 initialState:
-  username: "Veera"
+  username: "Veeramnikandan"
   cartCount: 5
   isSyncing: false
 

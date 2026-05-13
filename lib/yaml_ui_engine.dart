@@ -1,5 +1,6 @@
 
 export 'core/parser/yaml_parser.dart';
+export 'core/parser/json_parser.dart';
 export 'core/registry/widget_registry.dart';
 export 'core/runtime/ui/ui_engine.dart';
 export 'core/focus/focus_engine.dart';

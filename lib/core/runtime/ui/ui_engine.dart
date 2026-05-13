@@ -5,6 +5,7 @@ import '../../state/app_state.dart';
 import '../../permissions/permission_engine.dart';
 import '../../effects/effect_engine.dart';
 import '../../parser/yaml_parser.dart';
+import '../../parser/json_parser.dart';
 import '../../actions/action_engine.dart';
 import 'package:yaml_ui_engine/core/runtime/ui/widgets/advanced_widgets.dart';
 import 'package:yaml_ui_engine/core/runtime/ui/widgets/base_widgets.dart';
@@ -21,6 +22,20 @@ class YamlUiBuilder extends ConsumerStatefulWidget {
   /// Helper to build a UI directly from a raw YAML string.
   factory YamlUiBuilder.fromYaml(String yamlString) {
     return YamlUiBuilder(definition: YamlParser.parse(yamlString));
+  }
+
+  /// Helper to build a UI directly from a raw JSON string.
+  factory YamlUiBuilder.fromJson(String jsonString) {
+    return YamlUiBuilder(definition: JsonParser.parse(jsonString));
+  }
+
+  /// Helper to build a UI from a string, automatically detecting if it's JSON or YAML.
+  factory YamlUiBuilder.fromString(String data) {
+    final trimmed = data.trim();
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+      return YamlUiBuilder.fromJson(data);
+    }
+    return YamlUiBuilder.fromYaml(data);
   }
 
   @override

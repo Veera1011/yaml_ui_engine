@@ -1,6 +1,6 @@
 # YAML Flutter Engine
 
-A production-grade, enterprise-ready runtime engine that renders Flutter UIs and handles complex business logic directly from YAML/JSON configurations.
+A production-grade, enterprise-ready runtime engine that renders Flutter UIs and handles complex business logic directly from YAML or JSON configurations.
 
 ## Features
 
@@ -24,33 +24,36 @@ dependencies:
   yaml_ui_engine: # current path
 ```
 
-### 2. Basic Implementation
-Wrap your app in a `ProviderScope` and use the `YamlUiBuilder`.
+Wrap your app in a `ProviderScope` and use the `YamlUiBuilder`. You can load configurations from YAML or JSON.
 
+#### Using YAML
 ```dart
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yaml_ui_engine/yaml_ui_engine.dart';
+YamlUiBuilder.fromYaml('''
+  appBar:
+    title: YAML App
+  body:
+    type: text
+    value: "Hello from YAML!"
+''')
+```
 
-void main() {
-  runApp(const ProviderScope(child: MyApp()));
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: YamlUiBuilder.fromYaml('''
-        appBar:
-          title: Welcome App
-        body:
-          type: column
-          children:
-            - type: text
-              value: "Hello World!"
-      '''),
-    );
+#### Using JSON
+```dart
+YamlUiBuilder.fromJson('''
+{
+  "appBar": { "title": "JSON App" },
+  "body": {
+    "type": "text",
+    "value": "Hello from JSON!"
   }
 }
+''')
+```
+
+#### Smart Auto-Detection
+```dart
+// Automatically detects format (JSON or YAML)
+YamlUiBuilder.fromString(dynamicDataString)
 ```
 
 ---
@@ -76,22 +79,21 @@ class MyApp extends StatelessWidget {
 
 ---
 
-## 💡 Pro Tip: Inline Syntax (JSON-Style)
-YAML is a superset of JSON. For small widgets or nested properties, you can use compact inline syntax to keep your configurations concise:
+While the engine started with YAML, it now fully supports JSON. You can even mix them or use the smart `fromString` factory to handle dynamic inputs from APIs without worrying about the format.
 
-**Standard:**
-```yaml
-appBar:
-  title: My App
-  centerTitle: true
+**JSON Example:**
+```json
+{
+  "type": "container",
+  "padding": 16,
+  "child": {
+    "type": "text",
+    "value": "I am a JSON widget"
+  }
+}
 ```
 
-**Inline:**
-```yaml
-appBar: { title: "My App", centerTitle: true }
-```
-
-Both are valid and can be mixed throughout your screens.
+Both formats are parsed into the same internal representation, so all features (logic, actions, state) work identically.
 
 ---
 
@@ -177,7 +179,7 @@ ComponentRegistry.register('user_card', {
 type: component
 name: user_card
 params:
-  name: "Veera"
+  name: "Veeramnikandan"
 ```
 
 ---
