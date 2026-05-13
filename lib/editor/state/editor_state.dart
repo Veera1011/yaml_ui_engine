@@ -28,7 +28,6 @@ class EditorStateNotifier extends Notifier<EditorState> {
   @override
   EditorState build() {
     return EditorState(definition: {
-      'type': 'scaffold',
       'appBar': {'title': 'New Screen'},
       'body': {'type': 'column', 'children': []}
     });
@@ -69,13 +68,22 @@ class EditorStateNotifier extends Notifier<EditorState> {
   }
 
   /// Adds a child widget to a parent list.
-  void addWidget(String parentPath, Map<String, dynamic> widgetDef) {
+  void addWidget(String? parentPath, Map<String, dynamic> widgetDef) {
     final newDef = Map<String, dynamic>.from(state.definition);
-    if (parentPath == 'body.children') {
-      final children = List<dynamic>.from(newDef['body']['children'] ?? []);
-      children.add(widgetDef);
-      newDef['body']['children'] = children;
-    }
+    final targetPath = parentPath ?? 'body.children';
+    
+    _updateDeep(newDef, targetPath.split('.'), (node) {
+      if (node is List) {
+        node.add(widgetDef);
+      } else if (node is Map<String, dynamic> && node.containsKey('children')) {
+        final children = List<dynamic>.from(node['children'] ?? []);
+        children.add(widgetDef);
+        node['children'] = children;
+      } else if (node is Map<String, dynamic> && node.containsKey('child')) {
+        node['child'] = widgetDef;
+      }
+    });
+    
     updateDefinition(newDef);
   }
 

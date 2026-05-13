@@ -6,6 +6,10 @@ import '../../permissions/permission_engine.dart';
 import '../../effects/effect_engine.dart';
 import '../../parser/yaml_parser.dart';
 import '../../actions/action_engine.dart';
+import 'package:yaml_ui_engine/core/runtime/ui/widgets/advanced_widgets.dart';
+import 'package:yaml_ui_engine/core/runtime/ui/widgets/base_widgets.dart';
+import 'package:yaml_ui_engine/core/runtime/ui/widgets/element_widgets.dart';
+import 'package:yaml_ui_engine/core/runtime/ui/widgets/layout_widgets.dart';
 import 'utils/config_parser.dart';
 
 /// The root widget that builds a UI from a Map definition.
@@ -27,6 +31,12 @@ class _YamlUiBuilderState extends ConsumerState<YamlUiBuilder> {
   @override
   void initState() {
     super.initState();
+    // 0. Ensure all widgets are registered
+    registerBaseWidgets();
+    registerLayoutWidgets();
+    registerAdvancedWidgets();
+    registerElementWidgets();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 1. Initialize State Features (Initial State, Persistence, Computed)
       ref.read(appStateProvider.notifier).initialize(
@@ -242,24 +252,34 @@ class _YamlUiBuilderState extends ConsumerState<YamlUiBuilder> {
     final unselectedColor = ConfigParser.parseColor(def['unselectedColor']);
     final typeStr = def['type']?.toString().toLowerCase();
 
-    return BottomNavigationBar(
-      backgroundColor: bgColor,
-      selectedItemColor: selectedColor,
-      unselectedItemColor: unselectedColor,
-      type: typeStr == 'fixed' ? BottomNavigationBarType.fixed : BottomNavigationBarType.shifting,
-      items: items.map((item) {
-        final label = item['label']?.toString() ?? '';
-        final iconStr = item['icon']?.toString();
-        return BottomNavigationBarItem(
-          icon: Icon(ConfigParser.parseIconData(iconStr) ?? Icons.circle),
-          label: label,
+    return Consumer(
+      builder: (context, ref, child) {
+        final state = ref.watch(appStateProvider);
+        final stateKey = '${def['id'] ?? 'bottom_nav'}_index';
+        final currentIndex = int.tryParse(state[stateKey]?.toString() ?? def['selectedIndex']?.toString() ?? '0') ?? 0;
+
+        return BottomNavigationBar(
+          currentIndex: currentIndex,
+          backgroundColor: bgColor,
+          selectedItemColor: selectedColor,
+          unselectedItemColor: unselectedColor,
+          type: typeStr == 'fixed' ? BottomNavigationBarType.fixed : BottomNavigationBarType.shifting,
+          items: items.map((item) {
+            final label = item['label']?.toString() ?? '';
+            final iconStr = item['icon']?.toString();
+            return BottomNavigationBarItem(
+              icon: Icon(ConfigParser.parseIconData(iconStr) ?? Icons.circle),
+              label: label,
+            );
+          }).toList(),
+          onTap: (index) {
+            ref.read(appStateProvider.notifier).setValue(stateKey, index);
+            final route = items[index]['route']?.toString();
+            if (route != null) {
+              Navigator.pushNamed(context, route);
+            }
+          },
         );
-      }).toList(),
-      onTap: (index) {
-        final route = items[index]['route']?.toString();
-        if (route != null) {
-          Navigator.pushNamed(context, route);
-        }
       },
     );
   }

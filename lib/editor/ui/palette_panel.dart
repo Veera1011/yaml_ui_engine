@@ -36,8 +36,9 @@ class PalettePanel extends ConsumerWidget {
                   leading: Icon(w['icon'] as IconData),
                   title: Text(w['name'] as String),
                   onTap: () {
-                    // For now, just add to body children
-                    ref.read(editorStateProvider.notifier).addWidget('body.children', w['def'] as Map<String, dynamic>);
+                    // Add to selected path if it's a list/container, otherwise default to body.children
+                    final target = ref.read(editorStateProvider).selectedPath;
+                    ref.read(editorStateProvider.notifier).addWidget(target, w['def'] as Map<String, dynamic>);
                   },
                   trailing: const Icon(Icons.add_circle_outline, size: 20),
                 );

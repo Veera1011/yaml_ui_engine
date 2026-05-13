@@ -48,7 +48,68 @@ class PropertyInspector extends ConsumerWidget {
           
           const SizedBox(height: 16),
           
-          // Add more property editors based on type...
+          if (definition.containsKey('label')) ...[
+            const SizedBox(height: 16),
+            const Text('Label', style: TextStyle(fontWeight: FontWeight.w500)),
+            const SizedBox(height: 8),
+            TextFormField(
+              key: ValueKey('$path-label'),
+              initialValue: definition['label']?.toString(),
+              decoration: const InputDecoration(border: OutlineInputBorder()),
+              onFieldSubmitted: (val) => ref.read(editorStateProvider.notifier).updateWidgetProperty(path, 'label', val),
+            ),
+          ],
+          
+          if (definition.containsKey('color')) ...[
+            const SizedBox(height: 16),
+            const Text('Color (Hex)', style: TextStyle(fontWeight: FontWeight.w500)),
+            const SizedBox(height: 8),
+            TextFormField(
+              key: ValueKey('$path-color'),
+              initialValue: definition['color']?.toString(),
+              decoration: const InputDecoration(border: OutlineInputBorder(), hintText: '#RRGGBB'),
+              onFieldSubmitted: (val) => ref.read(editorStateProvider.notifier).updateWidgetProperty(path, 'color', val),
+            ),
+          ],
+
+          if (definition.containsKey('width') || definition.containsKey('height')) ...[
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                if (definition.containsKey('width')) Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Width', style: TextStyle(fontWeight: FontWeight.w500)),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        key: ValueKey('$path-width'),
+                        initialValue: definition['width']?.toString(),
+                        decoration: const InputDecoration(border: OutlineInputBorder()),
+                        onFieldSubmitted: (val) => ref.read(editorStateProvider.notifier).updateWidgetProperty(path, 'width', val),
+                      ),
+                    ],
+                  ),
+                ),
+                if (definition.containsKey('width') && definition.containsKey('height')) const SizedBox(width: 16),
+                if (definition.containsKey('height')) Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Height', style: TextStyle(fontWeight: FontWeight.w500)),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        key: ValueKey('$path-height'),
+                        initialValue: definition['height']?.toString(),
+                        decoration: const InputDecoration(border: OutlineInputBorder()),
+                        onFieldSubmitted: (val) => ref.read(editorStateProvider.notifier).updateWidgetProperty(path, 'height', val),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
 
           const Spacer(),
           ElevatedButton(

@@ -20,3 +20,4 @@ export 'core/validation/validation_engine.dart';
 export 'core/theme/theme_engine.dart';
 export 'core/permissions/permission_engine.dart';
 export 'core/rules/rule_engine.dart';
+export 'editor/ui/admin_editor_screen.dart';

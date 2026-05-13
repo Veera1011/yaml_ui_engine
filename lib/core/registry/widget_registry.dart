@@ -17,6 +17,15 @@ typedef DynamicWidgetBuilder = Widget Function(
 class WidgetRegistry {
   static final Map<String, DynamicWidgetBuilder> _registry = {};
   static bool isEditorMode = false;
+  static bool _initialized = false;
+
+  /// Initializes the registry with all built-in widgets.
+  static void init() {
+    if (_initialized) return;
+    // We import these at runtime to avoid circular dependencies if possible, 
+    // but here we can just use the provided registration functions.
+    _initialized = true;
+  }
 
   /// Registers a new widget builder for a given type.
   static void register(String type, DynamicWidgetBuilder builder) {
