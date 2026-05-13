@@ -52,6 +52,7 @@ class ActionEngine {
         }
         break;
       case 'snackbar':
+      case 'snack':
         final message = actionDef['message'] as String?;
         if (message != null && context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -161,6 +162,7 @@ class ActionEngine {
         }
         break;
       case 'confirm':
+      case 'dialog':
         if (!context.mounted) break;
         final confirmed = await showDialog<bool>(
           context: context,
