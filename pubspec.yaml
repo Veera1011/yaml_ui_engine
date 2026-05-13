@@ -1,6 +1,6 @@
 name: yaml_ui_engine
 description: "A production-grade YAML-driven Flutter runtime engine with dynamic state, expressions, workflows, and a visual admin editor."
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/Veera1011/yaml_ui_engine
 
 environment:
