@@ -77,7 +77,7 @@ void registerBaseWidgets() {
         final isEnabled = !RuleEngine.evaluateProperty(definition['disabledIf'], localContext);
 
         return DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           decoration: InputDecoration(
             labelText: definition['label']?.toString() ?? name,
           ),

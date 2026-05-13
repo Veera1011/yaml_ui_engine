@@ -1,7 +1,7 @@
 import 'package:yaml/yaml.dart';
 
 class YamlParser {
-  /// Parses a YAML string into a Map<String, dynamic>.
+  /// Parses a YAML string into a Map.
   static Map<String, dynamic> parse(String yamlString) {
     try {
       final document = loadYaml(yamlString);

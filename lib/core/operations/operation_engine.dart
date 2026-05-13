@@ -50,7 +50,6 @@ class OperationEngine {
       ]);
       return evaluator.eval(expression, context);
     } catch (e) {
-      print("Expression evaluation error for '$expressionString': $e");
       return null;
     }
   }

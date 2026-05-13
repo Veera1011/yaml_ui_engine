@@ -11,12 +11,12 @@ import '../focus/focus_engine.dart';
 
 class ActionEngine {
   /// Executes a dynamic action (or list of actions) based on its definition.
-  /// Executes a dynamic action (or list of actions) based on its definition.
   /// [contextMap] is a local scope for sharing data between workflow steps.
   static Future<void> execute(BuildContext context, WidgetRef ref, dynamic actionDef, {Map<String, dynamic>? contextMap}) async {
     // Check permissions before execution
     final state = ref.read(appStateProvider);
-    final combinedState = {...state, if (contextMap != null) 'context': contextMap};
+    final combinedState = Map<String, dynamic>.from(state);
+    if (contextMap != null) combinedState['context'] = contextMap;
 
     if (actionDef is Map<String, dynamic>) {
        if (!PermissionEngine.hasPermission(actionDef, combinedState)) {
@@ -41,7 +41,8 @@ class ActionEngine {
   static Future<void> _executeSingleAction(BuildContext context, WidgetRef ref, Map<String, dynamic> actionDef, {Map<String, dynamic>? contextMap}) async {
     final type = actionDef['type'] as String?;
     final state = ref.read(appStateProvider);
-    final combinedState = {...state, if (contextMap != null) 'context': contextMap};
+    final combinedState = Map<String, dynamic>.from(state);
+    if (contextMap != null) combinedState['context'] = contextMap;
 
     switch (type) {
       case 'navigate':
@@ -174,14 +175,14 @@ class ActionEngine {
         );
         if (confirmed == true) {
           final onConfirm = actionDef['onConfirm'];
-          if (onConfirm != null) await execute(context, ref, onConfirm, contextMap: contextMap);
+          if (onConfirm != null && context.mounted) await execute(context, ref, onConfirm, contextMap: contextMap);
         } else {
           final onCancel = actionDef['onCancel'];
-          if (onCancel != null) await execute(context, ref, onCancel, contextMap: contextMap);
+          if (onCancel != null && context.mounted) await execute(context, ref, onCancel, contextMap: contextMap);
         }
         break;
       default:
-        print('Unknown action type: $type');
+        break;
     }
   }
 }

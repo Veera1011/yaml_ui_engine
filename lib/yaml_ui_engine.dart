@@ -1,4 +1,3 @@
-library yaml_ui_engine;
 
 export 'core/parser/yaml_parser.dart';
 export 'core/registry/widget_registry.dart';

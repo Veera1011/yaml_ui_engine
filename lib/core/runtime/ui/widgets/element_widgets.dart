@@ -54,7 +54,7 @@ void registerElementWidgets() {
           children: [
             Switch(
               value: value,
-              activeColor: activeColor,
+              activeThumbColor: activeColor,
               onChanged: (newValue) {
                 ref.read(appStateProvider.notifier).setValue(name, newValue);
               },
