@@ -1,6 +1,6 @@
 name: yaml_ui_engine
-description: "A new Flutter package project."
-version: 0.0.1
+description: "A production-grade YAML-driven Flutter runtime engine with dynamic state, expressions, workflows, and a visual admin editor."
+version: 1.0.0
 homepage:
 
 environment:
